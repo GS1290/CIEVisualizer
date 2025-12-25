@@ -1,4 +1,4 @@
-#version 330 core
+#version 330
 
 // Input vertex attributes
 in vec3 vertexPosition;
@@ -14,13 +14,19 @@ out vec2 fragTexCoord;
 out vec4 fragColor;
 
 // NOTE: Add your custom variables here
+float den;
+vec3 xyY;
 
 void main()
 {
     // Send vertex attributes to fragment shader
     fragTexCoord = vertexTexCoord;
-    fragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    fragColor = vertexColor;
 
     // Calculate final vertex position
-    gl_Position = mvp*vec4(vertexPosition, 1.0);
+    den = 0.6442*vertexPosition.x + 1.1920*vertexPosition.y + 1.2033*vertexPosition.z;
+    xyY.x = (0.4123*vertexPosition.x + 0.3576*vertexPosition.y + 0.1805*vertexPosition.z)/den;
+    xyY.z = 1-(0.2126*vertexPosition.x + 0.7152*vertexPosition.y + 0.0722*vertexPosition.z)/den;
+    xyY.y = 0.2126*vertexPosition.x + 0.7152*vertexPosition.y + 0.0722*vertexPosition.z;
+    gl_Position = mvp*vec4(xyY, 1.0);
 }

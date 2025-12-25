@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "raylib.h"
-#include "raymath.h"
+#include "rlgl.h"
 #include "helper.h"
 
 #define GLSL_VERSION            330
@@ -11,6 +11,7 @@ int main(void)
     // ... (InitWindow, Camera setup, etc.) ...
     const int screenWidth = 800;
     const int screenHeight = 450;
+    bool xyYSpace = false;
 
     InitWindow(screenWidth, screenHeight, "raylib [models] example - mesh generation");
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
@@ -40,16 +41,20 @@ int main(void)
     // or provide a simple shader that only uses vertex colors.
     // By default, DrawModel uses an internal shader that expects vertex colors if the mesh has them.
 
+    //DisableCursor();
     while (!WindowShouldClose())
     {
         // ... (UpdateCamera, etc.) ...
         UpdateCamera(&camera, CAMERA_FREE);
         if (IsKeyPressed(KEY_Z)) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
+        if (IsKeyPressed(KEY_R)) xyYSpace = !xyYSpace;
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
             ClearBackground(RAYWHITE);
             BeginMode3D(camera);
+                // --- Disable Culling for this draw call ---
+                rlDisableBackfaceCulling();
 
                 // Draw the model with its vertex colors
                 // The color passed to DrawModel is a tint, use WHITE to show original vertex colors
@@ -58,12 +63,11 @@ int main(void)
 
                 // Activate our custom shader to be applied on next shapes/textures drawings
                 //BeginShaderMode(shader);
-                DrawMesh(myMeshes[0], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
-                DrawMesh(myMeshes[1], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
-                DrawMesh(myMeshes[2], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
-                DrawMesh(myMeshes[3], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
-                DrawMesh(myMeshes[4], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
-                DrawMesh(myMeshes[5], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                if (xyYSpace)
+                    for(int i=0; i<6; i++) DrawMesh(myMeshes[i], material, MatrixScale(1.0f, 1.0f, 1.0f));
+                else for(int i=0; i<6; i++) DrawMesh(myMeshes[i], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+
+                
                 // Activate our default shader for next drawings
                 //EndShaderMode();
                 
