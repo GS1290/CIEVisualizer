@@ -1,106 +1,277 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
 #include "helper.h"
+
+Mesh* CreateRGBCube(int gridSize)
+{
+    int vertexCount = pow(gridSize+1, 2);
+    int triangleCount = 2*pow(gridSize, 2);
+
+    Mesh *meshes = (Mesh *)RL_MALLOC(6*sizeof(Mesh));
+    // Allocate memory for vertices (x, y, z for each vertex)
+    Vector3 *vertices = (Vector3 *)RL_MALLOC(vertexCount*sizeof(Vector3));
+    // Allocate memory for colors (r, g, b, a for each vertex)
+    Color *colors = (Color *)RL_MALLOC(vertexCount*sizeof(Color));
+
+    // Back Face
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = (Vector3){ xPos, yPos, 0.0f };
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[0] = CreateRGBFace(vertices, colors, gridSize);
+
+
+    // Front Face
+    Matrix matRotation = MatrixRotateY(180*DEG2RAD);
+    Matrix matTranslation = MatrixTranslate(1.0f, 0.0f, 1.0f);
+    Matrix matTransform = MatrixMultiply(matRotation, matTranslation);
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = Vector3Transform((Vector3){ xPos, yPos, 0.0f }, matTransform);
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[1] = CreateRGBFace(vertices, colors, gridSize);
+
+    
+
+    // Left Face
+    matRotation = MatrixRotateY(90*DEG2RAD);
+    matTranslation = MatrixTranslate(0.0f, 0.0f, 1.0f);
+    matTransform = MatrixMultiply(matRotation, matTranslation);
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = Vector3Transform((Vector3){ xPos, yPos, 0.0f }, matTransform);
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[2] = CreateRGBFace(vertices, colors, gridSize);
+
+    // Right Face
+    matRotation = MatrixRotateY(-90*DEG2RAD);
+    matTranslation = MatrixTranslate(1.0f, 0.0f, 0.0f);
+    matTransform = MatrixMultiply(matRotation, matTranslation);
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = Vector3Transform((Vector3){ xPos, yPos, 0.0f }, matTransform);
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[3] = CreateRGBFace(vertices, colors, gridSize);
+
+    // Top Face
+    matRotation = MatrixRotateX(90*DEG2RAD);
+    matTranslation = MatrixTranslate(0.0f, 1.0f, 0.0f);
+    matTransform = MatrixMultiply(matRotation, matTranslation);
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = Vector3Transform((Vector3){ xPos, yPos, 0.0f }, matTransform);
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[4] = CreateRGBFace(vertices, colors, gridSize);
+
+    // Bottom Face
+    matRotation = MatrixRotateX(-90*DEG2RAD);
+    matTranslation = MatrixTranslate(0.0f, 0.0f, 1.0f);
+    matTransform = MatrixMultiply(matRotation, matTranslation);
+    for (int y = 0; y < gridSize+1; y++)
+    {
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = Vector3Transform((Vector3){ xPos, yPos, 0.0f }, matTransform);
+            colors[x + y*(gridSize+1)] = (Color){ vertices[x + y*(gridSize+1)].x*255, \
+                                                vertices[x + y*(gridSize+1)].y*255, \
+                                                vertices[x + y*(gridSize+1)].z*255,  255 };
+        }
+    }
+    meshes[5] = CreateRGBFace(vertices, colors, gridSize);
+
+
+
+    RL_FREE(vertices);
+    RL_FREE(colors);
+
+    return meshes;
+
+} 
+
+Mesh CreateRGBFace(Vector3 *vertices, Color *colors, int gridSize)
+{
+    Mesh mesh = { 0 };
+
+    int vertexCount = pow(gridSize+1, 2);
+
+    // Triangles definition (indices)
+    int numFaces = gridSize*gridSize;
+    int *triangles = (int *)RL_MALLOC(numFaces*6*sizeof(int));
+    int t = 0;
+    for (int face = 0; face < numFaces; face++)
+    {
+        // Retrieve lower left corner from face ind
+        int i = face + face/gridSize;
+
+        triangles[t++] = i + gridSize + 1;
+        triangles[t++] = i + 1;
+        triangles[t++] = i;
+
+        triangles[t++] = i + gridSize + 1;
+        triangles[t++] = i + gridSize + 2;
+        triangles[t++] = i + 1;
+    }
+
+    mesh.vertexCount = vertexCount;
+    mesh.triangleCount = numFaces*2;
+    mesh.vertices = (float *)RL_MALLOC(mesh.vertexCount*3*sizeof(float));
+    mesh.colors = (unsigned char *)RL_MALLOC(mesh.vertexCount*4*sizeof(unsigned char));
+    mesh.indices = (unsigned short *)RL_MALLOC(mesh.triangleCount*3*sizeof(unsigned short));
+
+
+    // Mesh vertices position array
+    for (int i = 0; i < mesh.vertexCount; i++)
+    {
+        mesh.vertices[3*i] = vertices[i].x;
+        mesh.vertices[3*i + 1] = vertices[i].y;
+        mesh.vertices[3*i + 2] = vertices[i].z;
+    }
+
+    // Mesh vertices color array
+    for (int i = 0; i < mesh.vertexCount; i++)
+    {
+        mesh.colors[4*i] = colors[i].r;
+        mesh.colors[4*i + 1] = colors[i].g;
+        mesh.colors[4*i + 2] = colors[i].b;
+        mesh.colors[4*i + 3] = colors[i].a;
+    }
+
+    // Mesh indices array initialization
+    for (int i = 0; i < mesh.triangleCount*3; i++) mesh.indices[i] = triangles[i];
+
+    
+    RL_FREE(triangles);
+    // Upload the mesh data from CPU (RAM) to GPU (VRAM) memory
+    UploadMesh(&mesh, false);
+
+    return mesh;
+}
 
 Mesh CreateColoredSquare(Vector3 norm, int gridSize)
 {
-    Mesh mesh = {0};
-    mesh.vertexCount = 6*pow(gridSize, 2);
-    mesh.triangleCount = 2*pow(gridSize, 2);
+    Mesh mesh = { 0 };
+
+    int vertexCount = pow(gridSize+1, 2);
+    int triangleCount = 2*pow(gridSize, 2);
 
     // Allocate memory for vertices (x, y, z for each vertex)
-    mesh.vertices = (float*)MemAlloc(mesh.vertexCount * 3 * sizeof(float));
+    Vector3 *vertices = (Vector3 *)RL_MALLOC(vertexCount*sizeof(Vector3));
     // Allocate memory for colors (r, g, b, a for each vertex)
-    mesh.colors = (unsigned char*)MemAlloc(mesh.vertexCount * 4 * sizeof(unsigned char));
-    
-    // Check if allocation was successful (optional but good practice)
-    if (mesh.vertices == NULL || mesh.colors == NULL)
+    Color *colors = (Color *)RL_MALLOC(vertexCount*sizeof(Color));
+
+    for (int y = 0; y < gridSize+1; y++)
     {
-        TraceLog(LOG_ERROR, "Failed to allocate mesh memory");
-        // Free allocated memory if one fails
-        if (mesh.vertices) MemFree(mesh.vertices);
-        if (mesh.colors) MemFree(mesh.colors);
-        return mesh; // return empty mesh
+        // [0:1/gridSize:1]
+        float yPos = (float)y/gridSize;
+        for (int x = 0; x < gridSize+1; x++)
+        {
+            // [0:1/gridSize:1]
+            float xPos = (float)x/gridSize;
+            vertices[x + y*(gridSize+1)] = (Vector3){ xPos, yPos, 0.0f };
+            colors[x + y*(gridSize+1)] = (Color){ xPos*255, yPos*255, 0,  255 };
+        }
     }
 
-    float xstep = 1.0f/gridSize;
-    float ystep = 1.0f/gridSize;
-    float zstep = 0.0f/gridSize;
+    // Triangles definition (indices)
+    int numFaces = gridSize*gridSize;
+    int *triangles = (int *)RL_MALLOC(numFaces*6*sizeof(int));
+    int t = 0;
+    for (int face = 0; face < numFaces; face++)
+    {
+        // Retrieve lower left corner from face ind
+        int i = face + face/gridSize;
 
-    Vector3 vertices[4] = { 0 }; // Required to store face vertices
-    vertices[2] = (Vector3){ 0, 0, 0 };
-    vertices[3] = (Vector3){ 0, ystep, 0 };
-    int vertexi = 0;
-    int colori = 0;
+        triangles[t++] = i + gridSize + 1;
+        triangles[t++] = i;
+        triangles[t++] = i + 1;
 
-    for (int i = 0; i < gridSize; i++)
-        {
-            for (int j = 0; j < gridSize; j++)
-            {
-                vertices[0] = vertices[2]; // Shift in x axis to set up vertices for next face
-                vertices[1] = vertices[3];
-                vertices[2] = (Vector3){ vertices[2].x + xstep, vertices[2].y, vertices[2].z }; // Rotation matrix around y axis
-                vertices[3] = (Vector3){ vertices[3].x + xstep, vertices[3].y, vertices[3].z };
+        triangles[t++] = i + gridSize + 1;
+        triangles[t++] = i + 1;
+        triangles[t++] = i + gridSize + 2;
+    }
 
-                // Define vertex positions
-                mesh.vertices[vertexi++] = vertices[0].x;
-                mesh.vertices[vertexi++] = vertices[0].y;
-                mesh.vertices[vertexi++] = vertices[0].z;   // Bottom-left
-                mesh.colors[colori++] = vertices[0].x*255;
-                mesh.colors[colori++] = vertices[0].y*255;
-                mesh.colors[colori++] = vertices[0].z*255;
-                mesh.colors[colori++] = 255;   // Red
+    mesh.vertexCount = vertexCount;
+    mesh.triangleCount = numFaces*2;
+    mesh.vertices = (float *)RL_MALLOC(mesh.vertexCount*3*sizeof(float));
+    mesh.colors = (unsigned char *)RL_MALLOC(mesh.vertexCount*4*sizeof(unsigned char));
+    mesh.indices = (unsigned short *)RL_MALLOC(mesh.triangleCount*3*sizeof(unsigned short));
 
-                mesh.vertices[vertexi++] = vertices[2].x;
-                mesh.vertices[vertexi++] = vertices[2].y;
-                mesh.vertices[vertexi++] = vertices[2].z; // Top-left
-                mesh.colors[colori++] = vertices[2].x*255;
-                mesh.colors[colori++] = vertices[2].y*255;
-                mesh.colors[colori++] = vertices[2].z*255;
-                mesh.colors[colori++] = 255;   // Red
 
-                mesh.vertices[vertexi++] = vertices[1].x;
-                mesh.vertices[vertexi++] = vertices[1].y;
-                mesh.vertices[vertexi++] = vertices[1].z;  // Bottom-right
-                mesh.colors[colori++] = vertices[1].x*255;
-                mesh.colors[colori++] = vertices[1].y*255;
-                mesh.colors[colori++] = vertices[1].z*255;
-                mesh.colors[colori++] = 255;   // Red
+    // Mesh vertices position array
+    for (int i = 0; i < mesh.vertexCount; i++)
+    {
+        mesh.vertices[3*i] = vertices[i].x;
+        mesh.vertices[3*i + 1] = vertices[i].y;
+        mesh.vertices[3*i + 2] = vertices[i].z;
+    }
 
-                mesh.vertices[vertexi++] = vertices[1].x;
-                mesh.vertices[vertexi++] = vertices[1].y;
-                mesh.vertices[vertexi++] = vertices[1].z;   // Top-left
-                mesh.colors[colori++] = vertices[1].x*255;
-                mesh.colors[colori++] = vertices[1].y*255;
-                mesh.colors[colori++] = vertices[1].z*255;
-                mesh.colors[colori++] = 255;   // Red
+    // Mesh vertices color array
+    for (int i = 0; i < mesh.vertexCount; i++)
+    {
+        mesh.colors[4*i] = colors[i].r;
+        mesh.colors[4*i + 1] = colors[i].g;
+        mesh.colors[4*i + 2] = colors[i].b;
+        mesh.colors[4*i + 3] = colors[i].a;
+    }
 
-                mesh.vertices[vertexi++] = vertices[2].x;
-                mesh.vertices[vertexi++] = vertices[2].y;
-                mesh.vertices[vertexi++] = vertices[2].z; // Bottom-right
-                mesh.colors[colori++] = vertices[2].x*255;
-                mesh.colors[colori++] = vertices[2].y*255;
-                mesh.colors[colori++] = vertices[2].z*255;
-                mesh.colors[colori++] = 255;   // Red
+    // Mesh indices array initialization
+    for (int i = 0; i < mesh.triangleCount*3; i++) mesh.indices[i] = triangles[i];
 
-                mesh.vertices[vertexi++] = vertices[3].x;
-                mesh.vertices[vertexi++] = vertices[3].y;
-                mesh.vertices[vertexi++] = vertices[3].z;  // Top-right
-                mesh.colors[colori++] = vertices[3].x*255;
-                mesh.colors[colori++] = vertices[3].y*255;
-                mesh.colors[colori++] = vertices[3].z*255;
-                mesh.colors[colori++] = 255;   // Red
-                
-            }
-
-            vertices[2] = (Vector3){ 0.0f, vertices[2].y+ystep, vertices[2].z }; // Shift in y axis for next face
-            vertices[3] = (Vector3){ 0.0f, vertices[3].y+ystep, vertices[3].z }; 
-        }
-
-    printf("vertex count = %d\n", vertexi);
-    printf("color count = %d\n", colori);
-
+    RL_FREE(vertices);
+    RL_FREE(triangles);
+    RL_FREE(colors);
     // Upload the mesh data from CPU (RAM) to GPU (VRAM) memory
     UploadMesh(&mesh, false);
 

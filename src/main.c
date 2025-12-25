@@ -1,9 +1,12 @@
+#include <stdio.h>
 #include "raylib.h"
 #include "raymath.h"
 #include "helper.h"
 
+#define GLSL_VERSION            330
 
-int main()
+
+int main(void)
 {
     // ... (InitWindow, Camera setup, etc.) ...
     const int screenWidth = 800;
@@ -19,6 +22,12 @@ int main()
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
+    Shader shader = LoadShader(TextFormat("src/resources/rgb.vs"), TextFormat("src/resources/rgb.fs"));
+    Material material = LoadMaterialDefault();
+    material.shader = shader;
+    printf("Current working directory: %s\n", GetWorkingDirectory());
+
+    Mesh* myMeshes = CreateRGBCube(10);
     Mesh myMesh = CreateColoredSquare((Vector3){0.0f, 0.0f, 0.0f}, 10);
     Model myModel = LoadModelFromMesh(myMesh); // Create a model from the mesh
 
@@ -45,15 +54,29 @@ int main()
                 // Draw the model with its vertex colors
                 // The color passed to DrawModel is a tint, use WHITE to show original vertex colors
                 //DrawModel(myModel, (Vector3){0.0f, 0.0f, 0.0f}, 1.0f, WHITE);
-                DrawMesh(myMesh, LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+
+
+                // Activate our custom shader to be applied on next shapes/textures drawings
+                //BeginShaderMode(shader);
+                DrawMesh(myMeshes[0], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                DrawMesh(myMeshes[1], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                DrawMesh(myMeshes[2], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                DrawMesh(myMeshes[3], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                DrawMesh(myMeshes[4], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                DrawMesh(myMeshes[5], LoadMaterialDefault(), MatrixScale(1.0f, 1.0f, 1.0f));
+                // Activate our default shader for next drawings
+                //EndShaderMode();
+                
+
                 // Calculate transformation matrix from function parameters
                 // Get transform matrix (rotation -> scale -> translation)
-                Matrix matScale = MatrixScale(1.0f, 1.0f, 1.0f);
-                Matrix matRotation = MatrixRotate(rotationAxis, rotationAngle*DEG2RAD);
-                Matrix matTranslation = MatrixTranslate(position.x, position.y, position.z);
+                // Matrix matScale = MatrixScale(1.0f, 1.0f, 1.0f);
+                // Matrix matRotation = MatrixRotate(rotationAxis, rotationAngle*DEG2RAD);
+                // Matrix matTranslation = MatrixTranslate(position.x, position.y, position.z);
 
-                Matrix matTransform = MatrixMultiply(MatrixMultiply(matScale, matRotation), matTranslation);
-                DrawMesh(myMesh, LoadMaterialDefault(), matTransform);
+                // Matrix matTransform = MatrixMultiply(MatrixMultiply(matScale, matRotation), matTranslation);
+                // DrawMesh(myMesh, LoadMaterialDefault(), matTransform);
+
                 DrawGrid(10, 1.0f);
 
             EndMode3D();
