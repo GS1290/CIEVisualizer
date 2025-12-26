@@ -5,6 +5,10 @@
 
 #define GLSL_VERSION            330
 
+#define C_GLSL_INCLUDE
+#include "rgb.vs"
+#include "rgb.fs"
+
 
 int main(void)
 {
@@ -23,8 +27,8 @@ int main(void)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
-    Shader shader = LoadShader(TextFormat("src/resources/rgb.vs"), TextFormat("src/resources/rgb.fs"));
-    //Shader shader = LoadShader(TextFormat("rgb.vs"), TextFormat("rgb.fs"));
+    //Shader shader = LoadShader(TextFormat("src/resources/rgb.vs"), TextFormat("src/resources/rgb.fs"));
+    Shader shader = LoadShaderFromMemory(rgb_vs_src, rgb_fs_src);
     Material material = LoadMaterialDefault();
     material.shader = shader;
 

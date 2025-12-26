@@ -1,3 +1,5 @@
+#ifdef C_GLSL_INCLUDE
+const char* rgb_fs_src = R"(
 #version 330
 
 // Input vertex attributes (from vertex shader)
@@ -25,3 +27,5 @@ void main()
     //    times the fragment color (interpolated vertex color)
     finalColor = texelColor*colDiffuse*fragColor;
 }
+)";
+#endif

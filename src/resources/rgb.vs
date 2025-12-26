@@ -1,3 +1,5 @@
+#ifdef C_GLSL_INCLUDE
+const char* rgb_vs_src = R"(
 #version 330
 
 // Input vertex attributes
@@ -35,3 +37,5 @@ void main()
     r = (xyY - vertexPosition)*2*abs(fract(uTime/5) - 0.5f);
     gl_Position = mvp*vec4(vertexPosition+r, 1.0);
 }
+)";
+#endif
