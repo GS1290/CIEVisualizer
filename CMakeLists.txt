@@ -1,11 +1,12 @@
 # Specifies the minimum required version of CMake
 cmake_minimum_required(VERSION 3.28.3)
 
-
 set(RAYLIB_DIR /home/vboxuser/Desktop/Workspace_cpp/ciexyYVisualizer/external/raylib-5.5_linux_amd64)
 set(HELPER_LIB helper)
 # Defines the project name and enables C support
 project(app)
+
+set(CMAKE_C_FLAGS "-Wall -Wextra")
 
 add_library(${HELPER_LIB} STATIC ${CMAKE_SOURCE_DIR}/src/helper.c)
 target_include_directories(${HELPER_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

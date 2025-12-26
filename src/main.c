@@ -24,17 +24,17 @@ int main(void)
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     Shader shader = LoadShader(TextFormat("src/resources/rgb.vs"), TextFormat("src/resources/rgb.fs"));
+    //Shader shader = LoadShader(TextFormat("rgb.vs"), TextFormat("rgb.fs"));
     Material material = LoadMaterialDefault();
     material.shader = shader;
-    printf("Current working directory: %s\n", GetWorkingDirectory());
+
+    float time = 0.0f;
+    int timeLoc = GetShaderLocation(shader, "uTime");
+    SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
 
     Mesh* myMeshes = CreateRGBCube(10);
-    Mesh myMesh = CreateColoredSquare((Vector3){0.0f, 0.0f, 0.0f}, 10);
+    Mesh myMesh = CreateColoredSquare(10);
     Model myModel = LoadModelFromMesh(myMesh); // Create a model from the mesh
-
-    Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f };
-    float rotationAngle = 90.0f;
-    Vector3 position = { 1.0f, 0.0f, 0.0f };
 
     // If no normals are generated, you will need a shader that doesn't expect them 
     // or you can load a default material without a texture which uses the diffuse color
@@ -48,10 +48,12 @@ int main(void)
         UpdateCamera(&camera, CAMERA_FREE);
         if (IsKeyPressed(KEY_Z)) camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
         if (IsKeyPressed(KEY_R)) xyYSpace = !xyYSpace;
+        time = (float)GetTime();
+        SetShaderValue(shader, timeLoc, &time, SHADER_UNIFORM_FLOAT);
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground((Color){55, 55, 55, 255});
             BeginMode3D(camera);
                 // --- Disable Culling for this draw call ---
                 rlDisableBackfaceCulling();

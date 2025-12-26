@@ -3,7 +3,6 @@
 Mesh* CreateRGBCube(int gridSize)
 {
     int vertexCount = pow(gridSize+1, 2);
-    int triangleCount = 2*pow(gridSize, 2);
 
     Mesh *meshes = (Mesh *)RL_MALLOC(6*sizeof(Mesh));
     // Allocate memory for vertices (x, y, z for each vertex)
@@ -199,12 +198,11 @@ Mesh CreateRGBFace(Vector3 *vertices, Color *colors, int gridSize)
     return mesh;
 }
 
-Mesh CreateColoredSquare(Vector3 norm, int gridSize)
+Mesh CreateColoredSquare(int gridSize)
 {
     Mesh mesh = { 0 };
 
     int vertexCount = pow(gridSize+1, 2);
-    int triangleCount = 2*pow(gridSize, 2);
 
     // Allocate memory for vertices (x, y, z for each vertex)
     Vector3 *vertices = (Vector3 *)RL_MALLOC(vertexCount*sizeof(Vector3));

@@ -8,7 +8,7 @@
 
 Mesh* CreateRGBCube(int gridSize);
 Mesh CreateRGBFace(Vector3 *vertices, Color *colors, int gridSize);
-Mesh CreateColoredSquare(Vector3 norm, int gridSize);
+Mesh CreateColoredSquare(int gridSize);
 Mesh CreateColoredTriangle();
 
 
