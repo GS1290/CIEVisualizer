@@ -68,3 +68,7 @@ dkms.conf
 *.dwo
 
 !libraylib*.*
+!raylib*.*
+
+.vs/
+out/

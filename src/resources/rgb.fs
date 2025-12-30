@@ -1,31 +1,30 @@
 #ifdef C_GLSL_INCLUDE
-const char* rgb_fs_src = R"(
-#version 330
-
-// Input vertex attributes (from vertex shader)
-in vec2 fragTexCoord;
-in vec4 fragColor;
-
-// Input uniform values
-uniform sampler2D texture0;
-uniform vec4 colDiffuse;
-
-// Output fragment color
-out vec4 finalColor;
-
-// NOTE: Add your custom variables here
-
-void main()
-{
-    // Texel color fetching from texture sampler
-    vec4 texelColor = texture(texture0, fragTexCoord);
-
-    // NOTE: Implement here your fragment shader code
-
-    // final color is the color from the texture 
-    //    times the tint color (colDiffuse)
-    //    times the fragment color (interpolated vertex color)
-    finalColor = texelColor*colDiffuse*fragColor;
-}
-)";
+const char* rgb_fs_src = "\n"
+"#version 330\n"
+"\n"
+"// Input vertex attributes (from vertex shader)\n"
+"in vec2 fragTexCoord;\n"
+"in vec4 fragColor;\n"
+"\n"
+"// Input uniform values\n"
+"uniform sampler2D texture0;\n"
+"uniform vec4 colDiffuse;\n"
+"\n"
+"// Output fragment color\n"
+"out vec4 finalColor;\n"
+"\n"
+"// NOTE: Add your custom variables here\n"
+"\n"
+"void main()\n"
+"{\n"
+"    // Texel color fetching from texture sampler\n"
+"    vec4 texelColor = texture(texture0, fragTexCoord);\n"
+"\n"
+"    // NOTE: Implement here your fragment shader code\n"
+"\n"
+"    // final color is the color from the texture \n"
+"    //    times the tint color (colDiffuse)\n"
+"    //    times the fragment color (interpolated vertex color)\n"
+"    finalColor = texelColor*colDiffuse*fragColor;\n"
+"}\n";
 #endif
